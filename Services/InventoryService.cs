@@ -25,5 +25,54 @@ namespace Inventory_Managment_Sys.Services
             return products;
         }
 
+        public Product? SearchProductBySku(string sku)
+
+        {
+            return products.Find(product => product.SKU == sku);
+        }
+
+        public List<Product> SearchProductsByName(string name)
+        {
+            return products.FindAll(product => product.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public bool UpdateProductPrice(string sku, decimal newPrice)
+
+        {
+            Product? Product = SearchProductBySku(sku);
+
+            if (Product == null)
+            {
+                return false;
+            } 
+
+            if (newPrice < 0)
+            {
+                return false;
+            }
+
+            Product.Price = newPrice;
+            return true;
+        }
+
+
+
+        public bool UpdateProductQuantity(string sku, int newQuantity)
+        {
+            Product? product = SearchProductBySku(sku);
+            if (product == null)
+            {
+                return false;
+            }
+            if (newQuantity < 0)
+            {
+                return false;
+            }
+            product.QuantityOnHand = newQuantity;
+            return true;
+        }
+
+       
+
     }
 }
