@@ -56,23 +56,44 @@ namespace Inventory_Managment_Sys.Services
         }
 
 
-
-        public bool UpdateProductQuantity(string sku, int newQuantity)
+        public bool ReceiveInventory(string sku, int quantityReceived)
         {
             Product? product = SearchProductBySku(sku);
             if (product == null)
             {
                 return false;
             }
-            if (newQuantity < 0)
+            if (quantityReceived <= 0)
             {
                 return false;
             }
-            product.QuantityOnHand = newQuantity;
+            product.QuantityOnHand += quantityReceived;
             return true;
         }
 
-       
+
+        public bool ShipInventory(string sku, int quantityToShip)
+
+        {
+            Product? product = SearchProductBySku(sku);
+            if (product == null)
+            {
+                return false;
+            }
+            if (quantityToShip <= 0)
+            {
+                return false;
+            }
+
+            if (quantityToShip > product.QuantityOnHand)
+            {
+                return false;
+            }
+
+            product.QuantityOnHand -= quantityToShip;
+            return true;
+        }
+
 
     }
 }

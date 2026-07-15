@@ -11,10 +11,11 @@ while (running)
     Console.WriteLine("Inventory Management System");
     Console.WriteLine("1. Add Product");
     Console.WriteLine("2. View Products");
-    Console.WriteLine("3. Search Product by SKU");
+    Console.WriteLine("3. View Products Details");
     Console.WriteLine("4. Search Products by Name");
     Console.WriteLine("5. Update Product Price");
-    Console.WriteLine("6. Update Product Quantity");
+    Console.WriteLine("6. Receive Inventory");
+    Console.WriteLine("7. Ship Inventory");
     Console.WriteLine("0. Exit");
     Console.Write("Select an option: ");
     string option = Console.ReadLine();
@@ -27,7 +28,7 @@ while (running)
             ViewProducts();
             break;
         case "3":
-            SearchProductBySku();
+            ViewProductDetails();
             break;
         case "4":
             SearchProductsByName();
@@ -36,7 +37,10 @@ while (running)
             UpdateProductPrice();
             break;
         case "6":
-            UpdateProductQuantity();
+            ReceiveInventory();
+            break;
+        case "7":
+            ShipInventory();
             break;
         case "0":
             running = false;
@@ -67,6 +71,7 @@ void AddProduct()
     if (!int.TryParse(Console.ReadLine(), out int quantityOnHand))
     {
         Console.WriteLine("Invalid quantity. Please enter a valid integer.");
+        return;
     }
 
     if (string.IsNullOrEmpty(name))
@@ -130,7 +135,7 @@ void ViewProducts()
     }
 }
 
-void SearchProductBySku()
+void ViewProductDetails()
 {
     Console.Write("Enter Product SKU to search: ");
     string sku = Console.ReadLine();
@@ -200,28 +205,52 @@ void UpdateProductPrice()
     }
 }
 
-void UpdateProductQuantity()
+
+void ReceiveInventory()
 {
-    Console.Write("Enter Product SKU to update quantity: ");
+    Console.Write("Enter Product SKU: ");
     string sku = Console.ReadLine();
-    if (string.IsNullOrEmpty(sku))
-    {
-        Console.WriteLine("Product SKU cannot be empty. Please try again.");
-        return;
-    }
-    Console.Write("Enter new quantity: ");
-    if (!int.TryParse(Console.ReadLine(), out int newQuantity))
+
+    Console.Write("Enter quantity received: ");
+
+    if (!int.TryParse(Console.ReadLine(), out int quantityReceived))
+
     {
         Console.WriteLine("Invalid quantity. Please enter a valid integer.");
         return;
     }
-    bool success = inventoryService.UpdateProductQuantity(sku, newQuantity);
-    if (success)
+
+    bool sucess = inventoryService.ReceiveInventory(sku, quantityReceived);
+
+    if (sucess)
     {
-        Console.WriteLine("Product quantity updated successfully!");
+        Console.WriteLine("Inventory received sucessfully!");
     }
     else
     {
-        Console.WriteLine("Failed to update product quantity. Please check the SKU and make sure the quantity is not negative.");
+        Console.WriteLine("Failed to receive inventory. Please check the SKU and make sure the quantity is positive.");
+    }
+
+}
+
+
+void ShipInventory()
+{
+    Console.Write("Enter Product SKU: ");
+    string sku = Console.ReadLine();
+    Console.Write("Enter quantity to ship: ");
+    if (!int.TryParse(Console.ReadLine(), out int quantityToShip))
+    {
+        Console.WriteLine("Invalid quantity. Please enter a valid integer.");
+        return;
+    }
+    bool success = inventoryService.ShipInventory(sku, quantityToShip);
+    if (success)
+    {
+        Console.WriteLine("Inventory shipped successfully!");
+    }
+    else
+    {
+        Console.WriteLine("Failed to ship inventory. Please check the SKU and make sure the quantity is positive and does not exceed the available quantity.");
     }
 }
