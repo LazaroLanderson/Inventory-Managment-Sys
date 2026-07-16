@@ -106,6 +106,11 @@ namespace Inventory_Managment_Sys.Services
             return products.FindAll(product => product.QuantityOnHand > 0);
         }
 
+        public List<Product> GetLowStockProducts(int threshold)
+        {
+            return products.FindAll(product => product.QuantityOnHand < threshold);
+        }
+
 
     }
 }

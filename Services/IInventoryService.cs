@@ -13,6 +13,7 @@ namespace Inventory_Managment_Sys.Services
         Product? SearchProductBySku(string sku);
         List<Product> SearchProductsByName(string name);
         List<Product> GetInStockProducts();
+        List<Product> GetLowStockProducts(int threshold);
         bool UpdateProductPrice(string sku, decimal newPrice);
         bool ReceiveInventory(string sku, int quantityReceived);
         bool ShipInventory(string sku, int quantityShipped);

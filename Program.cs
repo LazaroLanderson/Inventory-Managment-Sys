@@ -17,6 +17,7 @@ while (running)
     Console.WriteLine("6. Receive Inventory");
     Console.WriteLine("7. Ship Inventory");
     Console.WriteLine("8. View In Stock Products");
+    Console.WriteLine("9. Get Low Stock Products");
     Console.WriteLine("0. Exit");
     Console.Write("Select an option: ");
     string option = Console.ReadLine();
@@ -45,6 +46,9 @@ while (running)
             break;
         case "8":
             ViewInStockProducts();
+            break;
+        case "9":
+            GetLowStockProducts();
             break;
         case "0":
             running = false;
@@ -273,6 +277,27 @@ void ViewInStockProducts()
         return;
     }
     Console.WriteLine("In Stock Products:");
+    foreach (var product in products)
+    {
+        DisplayProduct(product);
+    }
+}
+
+void GetLowStockProducts()
+{
+    Console.Write("Enter stock threshold: ");
+    if (!int.TryParse(Console.ReadLine(), out int threshold))
+    {
+        Console.WriteLine("Invalid threshold. Please enter a valid integer.");
+        return;
+    }
+    List<Product> products = inventoryService.GetLowStockProducts(threshold);
+    if (products.Count == 0)
+    {
+        Console.WriteLine("No products below the specified stock threshold.");
+        return;
+    }
+    Console.WriteLine($"Products below stock threshold of {threshold}:");
     foreach (var product in products)
     {
         DisplayProduct(product);
