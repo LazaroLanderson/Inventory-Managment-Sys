@@ -5,7 +5,7 @@ using Inventory_Managment_Sys.Models;
 
 namespace Inventory_Managment_Sys.Services
 {
-    internal class InventoryService
+    internal class InventoryService : IInventoryService
     {
 
         private List<Product> products = new List<Product>();
@@ -95,7 +95,7 @@ namespace Inventory_Managment_Sys.Services
         }
 
 
-        public bool productExists(string sku)
+        public bool ProductExists(string sku)
         {
             return products.Exists(product => product.SKU == sku);
         }

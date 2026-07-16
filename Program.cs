@@ -99,7 +99,7 @@ void AddProduct()
     }
 
 
-    if (inventoryService.productExists(sku))
+    if (inventoryService.ProductExists(sku))
     {
         Console.WriteLine("Product with the same SKU already exists. Please try again.");
         return;
