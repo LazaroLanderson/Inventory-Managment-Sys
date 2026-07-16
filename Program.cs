@@ -99,7 +99,7 @@ void AddProduct()
     }
 
 
-    if (inventoryService.GetAllProducts().Exists(product => product.SKU == sku))
+    if (inventoryService.productExists(sku))
     {
         Console.WriteLine("Product with the same SKU already exists. Please try again.");
         return;
@@ -131,7 +131,7 @@ void ViewProducts()
     Console.WriteLine("Product List:");
     foreach (var product in products)
     {
-        Console.WriteLine($"ID: {product.ProductId}, Name: {product.Name}, Description: {product.Description}, SKU: {product.SKU}, Price: {product.Price}, Quantity On Hand: {product.QuantityOnHand}");
+        DisplayProduct(product);
     }
 }
 
@@ -153,7 +153,7 @@ void ViewProductDetails()
         Console.WriteLine("Product not found.");
         return;
     }
-    Console.WriteLine($"ID: {product.ProductId}, Name: {product.Name}, Description: {product.Description}, SKU: {product.SKU}, Price: {product.Price}, Quantity On Hand: {product.QuantityOnHand}");
+    DisplayProduct(product);
 }
 
 void SearchProductsByName()
@@ -174,7 +174,7 @@ void SearchProductsByName()
     Console.WriteLine("Search Results:");
     foreach (var product in products)
     {
-        Console.WriteLine($"ID: {product.ProductId}, Name: {product.Name}, Description: {product.Description}, SKU: {product.SKU}, Price: {product.Price}, Quantity On Hand: {product.QuantityOnHand}");
+        DisplayProduct(product);
     }
 }
 
@@ -253,4 +253,9 @@ void ShipInventory()
     {
         Console.WriteLine("Failed to ship inventory. Please check the SKU and make sure the quantity is positive and does not exceed the available quantity.");
     }
+}
+
+void DisplayProduct(Product product)
+{
+    Console.WriteLine($"ID: {product.ProductId}, Name: {product.Name}, Description: {product.Description}, SKU: {product.SKU}, Price: {product.Price}, Quantity On Hand: {product.QuantityOnHand}");
 }

@@ -95,5 +95,11 @@ namespace Inventory_Managment_Sys.Services
         }
 
 
+        public bool productExists(string sku)
+        {
+            return products.Exists(product => product.SKU == sku);
+        }
+
+
     }
 }
