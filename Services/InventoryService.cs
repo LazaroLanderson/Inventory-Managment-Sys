@@ -101,5 +101,11 @@ namespace Inventory_Managment_Sys.Services
         }
 
 
+        public List<Product> GetInStockProducts()
+        {
+            return products.FindAll(product => product.QuantityOnHand > 0);
+        }
+
+
     }
 }

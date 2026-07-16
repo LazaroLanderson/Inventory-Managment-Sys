@@ -16,6 +16,7 @@ while (running)
     Console.WriteLine("5. Update Product Price");
     Console.WriteLine("6. Receive Inventory");
     Console.WriteLine("7. Ship Inventory");
+    Console.WriteLine("8. View In Stock Products");
     Console.WriteLine("0. Exit");
     Console.Write("Select an option: ");
     string option = Console.ReadLine();
@@ -41,6 +42,9 @@ while (running)
             break;
         case "7":
             ShipInventory();
+            break;
+        case "8":
+            ViewInStockProducts();
             break;
         case "0":
             running = false;
@@ -258,4 +262,19 @@ void ShipInventory()
 void DisplayProduct(Product product)
 {
     Console.WriteLine($"ID: {product.ProductId}, Name: {product.Name}, Description: {product.Description}, SKU: {product.SKU}, Price: {product.Price}, Quantity On Hand: {product.QuantityOnHand}");
+}
+
+void ViewInStockProducts()
+{
+    List<Product> products = inventoryService.GetInStockProducts();
+    if (products.Count == 0)
+    {
+        Console.WriteLine("No products in stock.");
+        return;
+    }
+    Console.WriteLine("In Stock Products:");
+    foreach (var product in products)
+    {
+        DisplayProduct(product);
+    }
 }
