@@ -111,6 +111,21 @@ namespace Inventory_Managment_Sys.Services
             return products.FindAll(product => product.QuantityOnHand < threshold);
         }
 
+        public decimal GetTotalInventoryValue()
+        {
+            decimal totalValue = 0;
+            foreach (var product in products)
+            {
+                totalValue += product.Price * product.QuantityOnHand;
+            }
+            return totalValue;
+        }
+
+        public decimal GetProductInventoryValue(Product product)
+        {
+            return product.Price * product.QuantityOnHand;
+        }
+
 
     }
 }

@@ -18,6 +18,8 @@ namespace Inventory_Managment_Sys.Services
         bool ReceiveInventory(string sku, int quantityReceived);
         bool ShipInventory(string sku, int quantityShipped);
         bool ProductExists(string sku);
+        decimal GetTotalInventoryValue();
+        decimal GetProductInventoryValue(Product product);
 
 
     }

@@ -18,6 +18,7 @@ while (running)
     Console.WriteLine("7. Ship Inventory");
     Console.WriteLine("8. View In Stock Products");
     Console.WriteLine("9. Get Low Stock Products");
+    Console.WriteLine("10. Get Product Inventory Value");
     Console.WriteLine("0. Exit");
     Console.Write("Select an option: ");
     string option = Console.ReadLine();
@@ -49,6 +50,9 @@ while (running)
             break;
         case "9":
             GetLowStockProducts();
+            break;
+        case "10":
+            GetProductInventoryValue();
             break;
         case "0":
             running = false;
@@ -302,4 +306,26 @@ void GetLowStockProducts()
     {
         DisplayProduct(product);
     }
+}
+
+void GetProductInventoryValue()
+{
+    Console.Write("Enter Product SKU to get inventory value: ");
+    string sku = Console.ReadLine();
+    if (string.IsNullOrEmpty(sku))
+    {
+        Console.WriteLine("Product SKU cannot be empty. Please try again.");
+        return;
+    }
+    Product? product = inventoryService.SearchProductBySku(sku);
+    if (product == null)
+    {
+        Console.WriteLine("Product not found.");
+        return;
+    }
+    decimal inventoryValue = inventoryService.GetProductInventoryValue(product);
+    Console.WriteLine($"Inventory value for product {product.Name} (SKU: {product.SKU}): {inventoryValue}");
+
+    decimal totalInventoryValue = inventoryService.GetTotalInventoryValue();
+    Console.WriteLine($"Total inventory value: {totalInventoryValue}");
 }
