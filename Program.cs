@@ -1,7 +1,13 @@
 ﻿using Inventory_Managment_Sys.Services;
 using Inventory_Managment_Sys.Models;
+using Inventory_Managment_Sys.Data;
 
-InventoryService inventoryService = new InventoryService();
+ProductRepository productRepository = new ProductRepository();
+TransactionRepository transactionRepository = new TransactionRepository();
+
+InventoryService inventoryService = new InventoryService(productRepository, transactionRepository);
+
+Console.WriteLine("Welcome to the Inventory Management System!");
 
 
 bool running = true;

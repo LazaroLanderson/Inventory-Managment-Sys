@@ -2,18 +2,24 @@
 using System.Collections.Generic;
 using System.Text;
 using Inventory_Managment_Sys.Models;
+using Inventory_Managment_Sys.Data;
 
 namespace Inventory_Managment_Sys.Services
 {
     internal class InventoryService : IInventoryService
     {
 
-        private List<Product> products = new List<Product>();
+        // Campos privados para armazenar produtos e trans
+        private List<Product> products;
+        private readonly ProductRepository productRepository;
+        private List<InventoryTransaction> transactions;
+        private readonly TransactionRepository transactionRepository;
 
         public void AddProduct(Product product)
         {
 
             products.Add(product);
+            productRepository.SaveProducts(products);
 
 
 
@@ -39,9 +45,9 @@ namespace Inventory_Managment_Sys.Services
         public bool UpdateProductPrice(string sku, decimal newPrice)
 
         {
-            Product? Product = SearchProductBySku(sku);
+            Product? product = SearchProductBySku(sku);
 
-            if (Product == null)
+            if (product == null)
             {
                 return false;
             } 
@@ -51,7 +57,10 @@ namespace Inventory_Managment_Sys.Services
                 return false;
             }
 
-            Product.Price = newPrice;
+            product.Price = newPrice;
+
+            productRepository.SaveProducts(products);
+
             return true;
         }
 
@@ -68,6 +77,20 @@ namespace Inventory_Managment_Sys.Services
                 return false;
             }
             product.QuantityOnHand += quantityReceived;
+
+            productRepository.SaveProducts(products);
+
+            InventoryTransaction transaction = new InventoryTransaction
+            {
+                SKU = sku,
+                TransactionType = "Receive",
+                Quantity = quantityReceived,
+                CreatedAt = DateTime.Now
+            };
+
+            transactions.Add(transaction);
+            transactionRepository.SaveTransactions(transactions);
+
             return true;
         }
 
@@ -91,6 +114,20 @@ namespace Inventory_Managment_Sys.Services
             }
 
             product.QuantityOnHand -= quantityToShip;
+
+            productRepository.SaveProducts(products);
+
+            InventoryTransaction transaction = new InventoryTransaction
+            {
+                SKU = sku,
+                TransactionType = "Ship",
+                Quantity = quantityToShip,
+                CreatedAt = DateTime.Now
+            };
+
+            transactions.Add(transaction);
+            transactionRepository.SaveTransactions(transactions);
+
             return true;
         }
 
@@ -124,6 +161,17 @@ namespace Inventory_Managment_Sys.Services
         public decimal GetProductInventoryValue(Product product)
         {
             return product.Price * product.QuantityOnHand;
+        }
+
+
+
+
+        public InventoryService(ProductRepository productRepository, TransactionRepository transactionRepository)
+        {
+            this.productRepository = productRepository;
+            this.transactionRepository = transactionRepository;
+            products = productRepository.LoadProducts();
+            transactions = transactionRepository.LoadTransactions();
         }
 
 
